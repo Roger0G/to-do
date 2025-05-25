@@ -1,0 +1,16 @@
+.done {
+  text-decoration: line-through;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 2rem;
+}
+
+input[type="text"] {
+  padding: 0.5rem;
+}
+
+button {
+  margin-left: 0.5rem;
+}
