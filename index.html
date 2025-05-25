@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue Todo App</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2em; }
+    .done { text-decoration: line-through; }
+    button { margin-left: 0.5em; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>Vue Todo App</h1>
+
+    <div>
+      <input v-model="newTask" placeholder="Add a task" @keyup.enter="addTask">
+      <button @click="addTask">Add</button>
+    </div>
+
+    <ul>
+      <li v-for="task in tasks" :key="task.id">
+        <template v-if="editing === task.id">
+          <input v-model="editText" @keyup.enter="updateTask(task)">
+          <button @click="updateTask(task)">Save</button>
+          <button @click="cancelEdit">Cancel</button>
+        </template>
+        <template v-else>
+          <span :class="{ done: task.done }" @click="toggleDone(task)">{{ task.text }}</span>
+          <button @click="startEdit(task)">Edit</button>
+          <button @click="deleteTask(task)">Delete</button>
+        </template>
+      </li>
+    </ul>
+  </div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
