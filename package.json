@@ -1,0 +1,8 @@
+{
+  "name": "todo-root",
+  "private": true,
+  "scripts": {
+    "build": "cd frontend && npm run build",
+    "install:functions": "npm --prefix netlify install"
+  }
+}
