@@ -1,0 +1,7 @@
+{
+  "name": "netlify-vue-hello",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "rm -rf dist && mkdir dist && cp index.html dist/index.html && cp -r js dist/"
+  }
+}
