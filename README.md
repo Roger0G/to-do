@@ -16,11 +16,11 @@ npm run dev
 
 ### Backend functions
 
-Install the Netlify CLI if you haven't already and start the development server which serves both the frontend and the functions. Make sure dependencies are installed in `netlify/` so the SQLite driver is available:
+Install the Netlify CLI if you haven't already and start the development server which serves both the frontend and the functions. Install the backend dependencies using the root npm script so the SQLite driver is available:
 
 ```bash
 npm install -g netlify-cli # optional if already installed
-cd netlify && npm install
+npm run install:functions
 netlify dev
 ```
 
