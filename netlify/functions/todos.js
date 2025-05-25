@@ -1,58 +1,45 @@
-const fs = require('fs')
-const path = require('path')
-const dataPath = path.join(__dirname, 'todos.json')
-
-function load() {
-  try {
-    return JSON.parse(fs.readFileSync(dataPath))
-  } catch (e) {
-    return []
-  }
-}
-
-function save(todos) {
-  fs.writeFileSync(dataPath, JSON.stringify(todos, null, 2))
-}
+const db = require('./db')
 
 exports.handler = async function(event) {
-  const todos = load()
   const idMatch = event.path.match(/todos\/(\d+)$/)
   const id = idMatch ? parseInt(idMatch[1], 10) : null
 
   if (event.httpMethod === 'GET') {
     if (id !== null) {
-      const todo = todos.find(t => t.id === id)
+      const stmt = db.prepare('SELECT * FROM todos WHERE id = ?')
+      const todo = stmt.get(id)
       if (!todo) return { statusCode: 404, body: 'Not found' }
       return { statusCode: 200, body: JSON.stringify(todo) }
     }
+    const stmt = db.prepare('SELECT * FROM todos')
+    const todos = stmt.all()
     return { statusCode: 200, body: JSON.stringify(todos) }
   }
 
   if (event.httpMethod === 'POST') {
     const data = JSON.parse(event.body || '{}')
-    const todo = { id: Date.now(), title: data.title || '', completed: !!data.completed }
-    todos.push(todo)
-    save(todos)
+    const stmt = db.prepare('INSERT INTO todos (title, completed, urgency, created_at) VALUES (?, ?, ?, ?)')
+    const createdAt = new Date().toISOString()
+    const info = stmt.run(data.title || '', data.completed ? 1 : 0, data.urgency || 1, createdAt)
+    const todo = { id: info.lastInsertRowid, title: data.title || '', completed: !!data.completed, urgency: data.urgency || 1, created_at: createdAt }
     return { statusCode: 200, body: JSON.stringify(todo) }
   }
 
   if (event.httpMethod === 'PUT') {
     if (id === null) return { statusCode: 400, body: 'Missing id' }
     const data = JSON.parse(event.body || '{}')
-    const todo = todos.find(t => t.id === id)
-    if (!todo) return { statusCode: 404, body: 'Not found' }
-    todo.title = data.title
-    todo.completed = data.completed
-    save(todos)
+    const stmt = db.prepare('UPDATE todos SET title = ?, completed = ?, urgency = ? WHERE id = ?')
+    const info = stmt.run(data.title, data.completed ? 1 : 0, data.urgency || 1, id)
+    if (info.changes === 0) return { statusCode: 404, body: 'Not found' }
+    const todo = db.prepare('SELECT * FROM todos WHERE id = ?').get(id)
     return { statusCode: 200, body: JSON.stringify(todo) }
   }
 
   if (event.httpMethod === 'DELETE') {
     if (id === null) return { statusCode: 400, body: 'Missing id' }
-    const index = todos.findIndex(t => t.id === id)
-    if (index === -1) return { statusCode: 404, body: 'Not found' }
-    todos.splice(index, 1)
-    save(todos)
+    const stmt = db.prepare('DELETE FROM todos WHERE id = ?')
+    const info = stmt.run(id)
+    if (info.changes === 0) return { statusCode: 404, body: 'Not found' }
     return { statusCode: 200, body: JSON.stringify({ result: true }) }
   }
 
