@@ -2,6 +2,8 @@
 
 This project provides a todo application with a **React 18** frontend and a **Node.js** backend implemented as Netlify Functions. The frontend is written in TypeScript and built with Vite. The backend exposes a REST API with full CRUD functionality persisted in a SQLite database.
 
+> **Note**: The SQLite file `todos.db` is created inside the function's runtime directory. The directory is ephemeral, so the database is lost whenever the function is redeployed or restarted. For real deployments, connect the API to an external database or other persistent storage.
+
 Each todo stores a title, completion flag, urgency level (1&ndash;3) and a creation timestamp. Items can be sorted by creation date or urgency in the UI.
 
 ## Local development
