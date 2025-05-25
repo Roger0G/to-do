@@ -32,8 +32,8 @@ Requests to `/api/*` will be proxied to the function defined in `netlify/functio
 
 1. Commit the included `netlify.toml` configuration.
 2. Create a new site in the Netlify dashboard from this repository.
-3. Netlify will run `npm run build` in `frontend/` and publish the contents of `frontend/dist`.
-4. API calls from the frontend to `/api/*` will run the Netlify Functions backend.
+3. Netlify will run `cd frontend && npm run build` and publish the contents of `frontend/dist`.
+4. API calls from the frontend to `/api/*` will be handled by the functions in `netlify/functions`.
 
 ## Testing
 
