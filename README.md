@@ -1,6 +1,8 @@
 # Todo App
 
-This project provides a simple todo application with a **React 18** frontend and a **Node.js** backend implemented as Netlify Functions. The frontend is written in TypeScript and built with Vite. The backend exposes a REST API with full CRUD functionality stored in a small JSON file.
+This project provides a todo application with a **React 18** frontend and a **Node.js** backend implemented as Netlify Functions. The frontend is written in TypeScript and built with Vite. The backend exposes a REST API with full CRUD functionality persisted in a SQLite database.
+
+Each todo stores a title, completion flag, urgency level (1&ndash;3) and a creation timestamp. Items can be sorted by creation date or urgency in the UI.
 
 ## Local development
 
@@ -14,10 +16,11 @@ npm run dev
 
 ### Backend functions
 
-Install the Netlify CLI if you haven't already and start the development server which serves both the frontend and the functions:
+Install the Netlify CLI if you haven't already and start the development server which serves both the frontend and the functions. Make sure dependencies are installed in `netlify/` so the SQLite driver is available:
 
 ```bash
 npm install -g netlify-cli # optional if already installed
+cd netlify && npm install
 netlify dev
 ```
 
