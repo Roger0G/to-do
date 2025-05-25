@@ -1,6 +1,5 @@
 [build]
-command = ""
-publish = "frontend/dist"
-
+publish = "dist"
+functions = "netlify/functions"
 [functions]
 directory = "netlify/functions"
